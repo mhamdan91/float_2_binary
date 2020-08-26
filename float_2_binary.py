@@ -16,9 +16,8 @@ def twos_comp(number):
     return ''.join(number)
 
 
-# Function returns octal representation
-# Function returns octal representation
-def float_bin(number, places=3):
+# Function returns binary representation
+def float_bin(number, digits=4, places=4):
     LN = len(str(1 + number).split('.')[1])
     whole, dec = format(number, '0.{}f'.format(LN)).split(".")
     zeros = len(dec) - len(dec.lstrip('0'))
@@ -36,9 +35,23 @@ def float_bin(number, places=3):
     # Convert the whole number part to it's
     # respective binary form and remove the
     # "0b" from it.
+
+    # clamp input to only 4-bits
+    dig_cap = pow(2, digits) - 1
+    if whole < -dig_cap:
+        whole = -dig_cap
+    elif whole > dig_cap:
+        whole = dig_cap
+    else:
+        pass
+
     res = bin(abs(whole)).lstrip("0b")
     if whole < 0:
         res = twos_comp("0b0" + res)
+
+        # pad with 1s to meet digits precision
+        while len(res) < digits:
+            res = '1' + res
     res += "."
     # Iterate the number of times, we want
     # the number of decimal places to be
@@ -61,6 +74,7 @@ def float_bin(number, places=3):
             dec = digit * exponent
         else:
             dec = int(dec)
+
         # Keep adding the integer parts
         # receive to the result variable
         res += whole
@@ -84,8 +98,9 @@ def decimal_converter(num, zeros):
 n = input("Enter your floating point value : ")
 
 # Take user input for the number of
+d = int(input("Enter the number of digit places of the result : "))
 # decimal places user want result as
 p = int(input("Enter the number of decimal places of the result : "))
 
-print("Binary representation: ", float_bin(float(n), places=int(p)))
+print("Binary representation: ", float_bin(float(n), digits=int(d), places=int(p)))
 
