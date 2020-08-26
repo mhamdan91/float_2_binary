@@ -17,11 +17,12 @@ def twos_comp(number):
 
 
 # Function returns binary representation
-def float_bin(number, digits=4, places=4):
+def float_bin(number, digits, places=3):
     LN = len(str(1 + number).split('.')[1])
     whole, dec = format(number, '0.{}f'.format(LN)).split(".")
     zeros = len(dec) - len(dec.lstrip('0'))
 
+    # print(whole, dec, zeros)
     # Convert both whole number and decimal
     # part from string type to integer type
     dec = dec.split('0')
@@ -31,6 +32,7 @@ def float_bin(number, digits=4, places=4):
             break
     whole = int(whole)
     dec = int(dec)
+    # print(whole, dec)
 
     # Convert the whole number part to it's
     # respective binary form and remove the
@@ -46,13 +48,8 @@ def float_bin(number, digits=4, places=4):
         pass
 
     res = bin(abs(whole)).lstrip("0b")
-    if whole < 0:
-        res = twos_comp("0b0" + res)
+    ls = len(res)
 
-        # pad with 1s to meet digits precision
-        while len(res) < digits:
-            res = '1' + res
-    res += "."
     # Iterate the number of times, we want
     # the number of decimal places to be
     for x in range(places):
@@ -65,6 +62,7 @@ def float_bin(number, digits=4, places=4):
         whole, dec = DC.split(".")
         zeros = len(dec) - len(dec.lstrip('0'))
 
+
         # Convert the decimal part
         # to integer again
         if dec.__contains__('e'):
@@ -74,12 +72,27 @@ def float_bin(number, digits=4, places=4):
             dec = digit * exponent
         else:
             dec = int(dec)
-
+            # print(whole, dec, zeros)
         # Keep adding the integer parts
         # receive to the result variable
+        # res += "."
         res += whole
+    if str(number).__contains__('-'):
+        res = twos_comp("0b0" + res)
 
+        # pad with 1s to meet digits precision
+        while ls < digits - 1:
+            res = '1' + res
+            ls += 1
+    convert_2_int(res)
     return res
+
+
+def convert_2_int(num):
+    prod = 0
+    for i in range(len(num)):
+        prod += 2 ** i * int(num[-1 - i])
+    print("Decimal equivalent: ", prod)
 
 
 # Function converts the value passed as
