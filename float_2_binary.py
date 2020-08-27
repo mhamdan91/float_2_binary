@@ -1,4 +1,4 @@
-# get twos complement
+# get twos complement - applied to the whole number
 def twos_comp(number):
     number = list(number.split('b')[1])
     for i, num in enumerate(number):
